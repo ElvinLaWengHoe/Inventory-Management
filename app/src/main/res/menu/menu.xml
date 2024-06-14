@@ -1,0 +1,10 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_scan_qr"
+        android:title="@string/scan_qr_code"
+        android:icon="@drawable/nav_scanner"
+        android:iconTint="@color/white"
+        app:showAsAction="always"/>
+</menu>

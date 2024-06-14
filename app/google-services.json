@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "944152970832",
+    "firebase_url": "https://inventory-management-131d6-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "inventory-management-131d6",
+    "storage_bucket": "inventory-management-131d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:944152970832:android:5c2b464ca22a40cf5f3355",
+        "android_client_info": {
+          "package_name": "com.example.inventorymanagement1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLtrpejsE9zYOdv7CPkDjGy6h2Zf-cBqo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

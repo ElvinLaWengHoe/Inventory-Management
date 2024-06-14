@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:paddingTop="100dp"
+        app:srcCompat="@drawable/image_office_box" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="35sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/alatsi"
+        android:text="@string/inventory_management_app"
+        android:textAlignment="center"
+        android:layout_marginTop="50dp"/>
+
+    <Button
+        android:id="@+id/Login_button"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="55dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/design_button"
+        android:drawableStart="@drawable/image_login_icon"
+        android:paddingStart="20dp"
+        android:paddingEnd="175dp"
+
+        android:hint="@string/login"
+        android:textSize="22sp"/>
+
+    <Button
+        android:id="@+id/Register_button"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/design_button"
+        android:drawableStart="@drawable/image_register_icon"
+        android:paddingStart="20dp"
+        android:paddingEnd="150dp"
+
+        android:hint="@string/register"
+        android:textSize="22sp"/>
+</LinearLayout>

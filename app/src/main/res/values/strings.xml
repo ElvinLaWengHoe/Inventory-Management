@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">InventoryManagement1</string>
+
+    <string name="open_nav">Open navigation drawer</string>
+    <string name="close_nav">Close navigation drawer</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="component_name">Component Name</string>
+    <string name="quantity_increase_decrease">Quantity (Increase/Decrease)</string>
+    <string name="_0">0</string>
+    <string name="update">Update</string>
+    <string name="delete_item">Delete Item</string>
+    <string name="logout">Logout</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="click_here_to_register">Click Here To Register</string>
+    <string name="inventory_management_app">Inventory Management App</string>
+    <string name="register">Register</string>
+    <string name="click_here_to_login">Click Here To Login</string>
+    <string name="about_description_1">This App is made with the purpose of making inventory management easier.</string>
+    <string name="about_description_2">Add as many items as needed and uniquely identify them with their own QR codes.</string>
+    <string name="add_item">Add Item</string>
+    <string name="qr_code_number">Qr Code Number</string>
+    <string name="scan_qr_code_to_link_to_item">Scan QR code to link to item</string>
+    <string name="scan_qr">Scan QR</string>
+    <string name="save">Save</string>
+    <string name="qr_code_generator">QR Code Generator</string>
+    <string name="enter_text_to_generate_qr_code">Enter text to generate QR Code</string>
+    <string name="generated_qr_code">Generated QR Code</string>
+    <string name="generate_qr_code">Generate QR Code</string>
+    <string name="save_qr_code">Save QR Code</string>
+    <string name="item_name">Item Name</string>
+    <string name="quantity">Quantity:</string>
+    <string name="item_count">Item Count</string>
+    <string name="qr_code_">QR Code:</string>
+    <string name="qr_code">QR Code</string>
+    <string name="welcome">Welcome</string>
+    <string name="inventory_management_gmail_com">inventoryManagement@gmail.com</string>
+    <string name="scan_qr_code">Scan QR Code</string>
+    <string name="home">Home</string>
+    <string name="about">About</string>
+    <string name="edit_quantity">Edit Quantity</string>
+</resources>
