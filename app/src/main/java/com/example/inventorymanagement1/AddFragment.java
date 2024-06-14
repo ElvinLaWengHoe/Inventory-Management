@@ -137,12 +137,12 @@ public class AddFragment extends Fragment {
 
     private void insertData() {
         String name = itemName.getText().toString().trim().toLowerCase()
-                .replace(".",",")
-                .replace("$","&")
-                .replace("#","^")
-                .replace("[","(")
-                .replace("]",")")
-                .replace("/","-");
+                .replace(".","")
+                .replace("$","")
+                .replace("#","")
+                .replace("[","")
+                .replace("]","")
+                .replace("/","");
         String count = numbers.getText().toString().trim();
         String qrcode = qrCodeNumber.getText().toString().trim();
         String emailHeader = FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".", ",");
