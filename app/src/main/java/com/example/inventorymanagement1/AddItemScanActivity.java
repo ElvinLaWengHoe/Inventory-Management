@@ -14,6 +14,9 @@ import androidx.fragment.app.Fragment;
 
 import com.google.zxing.Result;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class AddItemScanActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
@@ -21,6 +24,7 @@ public class AddItemScanActivity extends AppCompatActivity implements ZXingScann
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
 
     private ZXingScannerView scannerView;
+    private static final String SPECIAL_CHARACTERS = "[.#$/\\[\\]]";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +42,22 @@ public class AddItemScanActivity extends AppCompatActivity implements ZXingScann
         }
     }
 
+    public static boolean containSpecialCharacters(com.google.zxing.Result result) {
+        String text_result = result.getText();
+        Pattern pattern = Pattern.compile(SPECIAL_CHARACTERS);
+        Matcher matcher = pattern.matcher(text_result);
+        return matcher.find();
+    }
+
     @Override
     public void handleResult(com.google.zxing.Result result) {
         if(AddFragment.qrCodeNumber != null) {
-            AddFragment.qrCodeNumber.setText(result.getText());
+            boolean hasSpecialChars = containSpecialCharacters(result);
+            if (hasSpecialChars) {
+                Toast.makeText(getApplicationContext(), "Special Characters (., #, $, [, ], /) are not allowed", Toast.LENGTH_SHORT).show();
+            } else {
+                AddFragment.qrCodeNumber.setText(result.getText());
+            }
         }
         onBackPressed();
     }
