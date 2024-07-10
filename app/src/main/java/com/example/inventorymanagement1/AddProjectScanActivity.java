@@ -10,16 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
-import com.google.zxing.Result;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-public class AddItemScanActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
+public class AddProjectScanActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
 
@@ -51,12 +48,12 @@ public class AddItemScanActivity extends AppCompatActivity implements ZXingScann
 
     @Override
     public void handleResult(com.google.zxing.Result result) {
-        if(AddFragment.qrCodeNumber != null) {
+        if(AddProjectFragment.qrCodeNumber != null) {
             boolean hasSpecialChars = containSpecialCharacters(result);
             if (hasSpecialChars) {
                 Toast.makeText(getApplicationContext(), "Special Characters (., #, $, [, ], /) are not allowed", Toast.LENGTH_SHORT).show();
             } else {
-                AddFragment.qrCodeNumber.setText(result.getText());
+                AddProjectFragment.qrCodeNumber.setText(result.getText());
             }
         }
         onBackPressed();

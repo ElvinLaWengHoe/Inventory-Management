@@ -16,6 +16,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +44,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
@@ -71,12 +73,52 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else {
             textView.setText(user.getEmail());
         }
+
+        if (savedInstanceState == null) {
+            handleIntent();
+        }
+    }
+
+    private void handleIntent() {
+        String projectName = getIntent().getStringExtra("project_name");
+        String projectQr = getIntent().getStringExtra("qrcode");
+
+        if (projectName != null && projectQr != null) {
+            Bundle args = new Bundle();
+            args.putString("project_name", projectName);
+            args.putString("qrcode", projectQr);
+
+            ProjectDetailsFragment fragment = new ProjectDetailsFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        } else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_home);
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+
+        if (currentFragment instanceof  ProjectDetailsFragment) {
+            menu.clear();
+            getMenuInflater().inflate(R.menu.menu_item, menu);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+        } else {
+            menu.clear();
+            getMenuInflater().inflate(R.menu.menu, menu);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         return true;
     }
 
@@ -91,6 +133,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -101,7 +144,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GeneratorFragment()).commit();
         }
         else if (id == R.id.nav_add) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddProjectFragment()).commit();
         }
         else if (id == R.id.nav_about) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutFragment()).commit();

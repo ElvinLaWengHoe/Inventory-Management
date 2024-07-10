@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
     android:orientation="vertical"
-    tools:context=".AddFragment">
+    tools:context=".AddItemFragment">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_marginBottom="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="40dp"
                 android:text="@string/quantity_increase_decrease"
                 android:textSize="22sp"
                 />
@@ -103,37 +103,13 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/qr_code_number"
-                android:textSize="22sp"
-                android:textAlignment="center"/>
-
-            <TextView
-                android:id="@+id/qrCodeNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text=""
-                android:hint="@string/scan_qr_code_to_link_to_item"
-                android:textSize="18sp"
-                android:textAlignment="center"/>
-            <Button
-                android:id="@+id/scan_qr_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:text="@string/scan_qr"/>
             <Button
                 android:id="@+id/save_button"
                 android:text="@string/save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="40dp"/>
         </LinearLayout>
 
 

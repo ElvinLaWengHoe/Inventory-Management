@@ -1,15 +1,12 @@
 package com.example.inventorymanagement1;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.inventorymanagement1.databinding.ActivityAddItemScanBinding;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,7 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
-public class AddFragment extends Fragment {
+public class AddItemFragment extends Fragment {
 
     private ImageView minus;
     private ImageView plus;
@@ -44,6 +40,7 @@ public class AddFragment extends Fragment {
     public static TextView qrCodeNumber;
     private Button qrScanBtn;
     private Button saveBtn;
+    private String projectName;
     Context context;
 
     @Override
@@ -61,19 +58,26 @@ public class AddFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_item, container, false);
 
         plus = view.findViewById(R.id.plus);
         minus = view.findViewById(R.id.minus);
         numbers = view.findViewById(R.id.numbers);
         itemName = view.findViewById(R.id.item_name);
-        qrCodeNumber = view.findViewById(R.id.qrCodeNumber);
-        qrScanBtn = view.findViewById(R.id.scan_qr_button);
         saveBtn = view.findViewById(R.id.save_button);
 
+        if (getArguments() != null) {
+            projectName = getArguments().getString("project_name");
+        } else {
+            projectName = "";
+        }
+
+        /*
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userId = user.getUid();
         itemDbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
+
+         */
 
         final int[] num = {0};
 
@@ -113,13 +117,6 @@ public class AddFragment extends Fragment {
             }
         });
 
-        qrScanBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(requireContext(), AddItemScanActivity.class);
-                startActivity(intent);
-            }
-        });
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,17 +141,16 @@ public class AddFragment extends Fragment {
                 .replace("]","")
                 .replace("/","");
         String count = numbers.getText().toString().trim();
-        String qrcode = qrCodeNumber.getText().toString().trim();
         String emailHeader = FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".", ",");
         String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-        DatabaseReference userDbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(emailHeader);
+        DatabaseReference userDbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(emailHeader).child("Project").child(projectName);
 
 
         userDbRef.child("Items").orderByChild("name").equalTo(name).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot nameSnapshot) {
-                if (name.isEmpty() || qrcode.isEmpty() || count.isEmpty()) {
+                if (name.isEmpty() || count.isEmpty()) {
                     Toast.makeText(getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
                 }
                 else if (nameSnapshot.exists()) {
@@ -162,30 +158,25 @@ public class AddFragment extends Fragment {
                     return;
                 }
                 else {
-                    userDbRef.child("Items").orderByChild("qrcode").equalTo(qrcode).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot qrSnapshot) {
-                            if (qrSnapshot.exists()) {
-                                Toast.makeText(getContext(), "Item with the same QR code already exists", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            DatabaseReference itemsDbRef = userDbRef.child("Items").child(name);
 
-                            itemsDbRef.child("name").setValue(name);
-                            itemsDbRef.child("count").setValue(count);
-                            itemsDbRef.child("qrcode").setValue(qrcode);
+                    DatabaseReference itemsDbRef = userDbRef.child("Items").child(name);
 
-                            Toast.makeText(getContext(), "Item Added", Toast.LENGTH_SHORT).show();
+                    itemsDbRef.child("name").setValue(name);
+                    itemsDbRef.child("count").setValue(count);
 
-                            Intent intent = new Intent(requireContext(), HomeActivity.class);
-                            startActivity(intent);
-                        }
+                    Toast.makeText(getContext(), "Item Added", Toast.LENGTH_SHORT).show();
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            Log.e("Firebase", "Error checking for existing item by QR code: " + error.getMessage());
-                        }
-                    });
+                    FragmentManager fragmentManager = getParentFragmentManager();
+                    ProjectDetailsFragment projectDetailsFragment = new ProjectDetailsFragment();
+
+                    Bundle args = new Bundle();
+                    args.putString("project_name", projectName);
+                    projectDetailsFragment.setArguments(args);
+
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, projectDetailsFragment)
+                            .addToBackStack(null)
+                            .commit();
                 }
             }
 

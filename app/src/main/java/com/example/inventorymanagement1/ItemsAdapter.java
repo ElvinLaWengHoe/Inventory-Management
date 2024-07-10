@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ContextThemeWrapper;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,8 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.protobuf.ApiOrBuilder;
-import com.example.inventorymanagement1.PopUpMenuHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +30,14 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
     private List<Items> filteredItemsList;
     private Context context;
     private int item_added_quantity, item_initial_quantity, item_final_quantity;
+    private String projectName;
 
 
-    public ItemsAdapter(Context context, List<Items> itemsList) {
+    public ItemsAdapter(Context context, List<Items> itemsList, String projectName) {
         this.itemsList = itemsList;
         this.filteredItemsList = new ArrayList<>(itemsList);
         this.context = context;
+        this.projectName = projectName;
     }
 
     @NonNull
@@ -53,14 +52,14 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         Items items = filteredItemsList.get(position);
         holder.item_name.setText(items.getName());
         holder.item_count.setText(items.getCount());
-        holder.item_qr_code.setText(items.getQrcode());
+        //holder.item_qr_code.setText(items.getQrcode());
 
         holder.popup_menu.setOnClickListener(v -> showPopupMenu(v, items, position ));
     }
 
     private void showPopupMenu(View view, Items items, int position) {
         PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
-        popupMenu.inflate(R.menu.popup_menu);
+        popupMenu.inflate(R.menu.popup_item_menu);
         PopUpMenuHelper.enablePopupMenuIcons(popupMenu);
 
         popupMenu.setOnMenuItemClickListener(menuItem -> {
@@ -202,14 +201,15 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
 
 
     private void deleteItemFromFirebase(Items items) {
-        if (items == null || items.getQrcode() == null || items.getQrcode().isEmpty()) {
+        if (items == null || items.getName() == null || items.getName().isEmpty()) {
             Log.e("ItemsAdapter", "Item or Item ID is null or empty");
             Toast.makeText(context, "Failed to delete item: Invalid item data", Toast.LENGTH_SHORT).show();
             return;
         }
 
         String emailHeader = FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".",",");
-        DatabaseReference userDbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(emailHeader).child("Items").child(items.getName());
+        DatabaseReference userDbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(emailHeader)
+                .child("Project").child(projectName).child("Items").child(items.getName());
 
         userDbRef.removeValue().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -222,10 +222,11 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         });
     }
 
-    private void updateItemInFirebase(String qrcode, String itemCount) {
+    private void updateItemInFirebase(String itemName, String itemCount) {
 
         String emailHeader = FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".", ",");
-        DatabaseReference userDbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(emailHeader).child("Items").child(qrcode);
+        DatabaseReference userDbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(emailHeader)
+                .child("Project").child(projectName).child("Items").child(itemName);
 
         userDbRef.child("count").setValue(itemCount).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -264,14 +265,14 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder{
-        TextView item_name, item_count, item_qr_code;
+        TextView item_name, item_count;
         ImageView popup_menu;
 
         public ItemViewHolder(@NonNull View itemsView) {
             super(itemsView);
             item_name = itemsView.findViewById(R.id.item_name);
             item_count = itemsView.findViewById(R.id.item_count);
-            item_qr_code = itemsView.findViewById(R.id.item_qr_code);
+            //item_qr_code = itemsView.findViewById(R.id.item_qr_code);
             popup_menu = itemsView.findViewById(R.id.popup_menu);
         }
     }

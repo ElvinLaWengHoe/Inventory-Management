@@ -1,5 +1,7 @@
 package com.example.inventorymanagement1;
 
+import static androidx.core.app.ActivityCompat.invalidateOptionsMenu;
+
 import android.content.ClipData;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,9 +34,14 @@ import android.view.ViewGroup;
 public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private ItemsAdapter itemsAdapter;
-    private List<Items> itemsList;
+    private ProjectAdapter projectAdapter;
+    private List<Project> projectList;
     private SearchView searchView;
+    private ProjectAdapter.OnProjectSelectedListener listener;
+
+    public HomeFragment() {
+        // Required empty public constructor
+    }
 
 
     @Override
@@ -42,16 +50,36 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         recyclerView = view.findViewById(R.id.recyclerView);
-        searchView = view.findViewById(R.id.search_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        searchView = view.findViewById(R.id.search_view_project);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        /*
         itemsList = new ArrayList<>();
         itemsAdapter = new ItemsAdapter(getContext(), itemsList);
         recyclerView.setAdapter(itemsAdapter);
+         */
 
-        loadItemsFromFirebase();
+        projectList = new ArrayList<>();
+        projectAdapter = new ProjectAdapter(getActivity(), projectList, this::onProjectSelected);
+        recyclerView.setAdapter(projectAdapter);
+
+        loadProjectFromFirebase();
         setupSearchView();
 
         return view;
+    }
+
+    private void onProjectSelected(String projectName) {
+        ProjectDetailsFragment fragment = new ProjectDetailsFragment();
+        Bundle args = new Bundle();
+        args.putString("project_name", projectName);
+        fragment.setArguments(args);
+
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
+        requireActivity().invalidateOptionsMenu();
     }
 
     private void setupSearchView() {
@@ -63,27 +91,30 @@ public class HomeFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                itemsAdapter.filter(newText);
+                projectAdapter.filter(newText);
                 return true;
             }
         });
     }
 
-    private void loadItemsFromFirebase() {
+    private void loadProjectFromFirebase() {
         String emailHeader = FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".",",");
-        DatabaseReference userDbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(emailHeader).child("Items");
+        DatabaseReference projectRef = FirebaseDatabase.getInstance().getReference().child("Users").child(emailHeader).child("Project");
 
-        userDbRef.addValueEventListener(new ValueEventListener() {
+        projectRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                itemsList.clear();
-                for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
-                    Items items = itemSnapshot.getValue(Items.class);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                projectList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Project project = snapshot.getValue(Project.class);
+                    projectList.add(project);
+                    /*
                     if (items != null) {
                         itemsList.add(items);
                     }
+                     */
                 }
-                itemsAdapter.updateItemsList(itemsList);
+                projectAdapter.updateProjectList(projectList);
             }
 
             @Override

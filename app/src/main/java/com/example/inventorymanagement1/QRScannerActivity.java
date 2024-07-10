@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +34,7 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
         EdgeToEdge.enable(this);
         scannerView = new ZXingScannerView(this);
         setContentView(scannerView);
+
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -96,22 +99,21 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
 
     private void fetchItemFromFirebase(String qrcode) {
         String emailHeader = FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".", ",");
-        DatabaseReference itemRef = FirebaseDatabase.getInstance().getReference().child("Users").child(emailHeader).child("Items");
+        DatabaseReference projectRef = FirebaseDatabase.getInstance().getReference().child("Users").child(emailHeader).child("Project");
 
-        itemRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        projectRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean itemFound = false;
-                for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
-                    String itemQrCode = itemSnapshot.child("qrcode").getValue(String.class);
+                for (DataSnapshot projectSnapshot : snapshot.getChildren()) {
+                    String itemQrCode = projectSnapshot.child("qrcode").getValue(String.class);
                     if (qrcode.equals(itemQrCode)) {
-                        Items items = itemSnapshot.getValue(Items.class);
-                        if (items != null) {
-                            Intent intent = new Intent(QRScannerActivity.this, EditItemActivityTest.class);
-                            intent.putExtra("item_name", items.getName());
-                            intent.putExtra("item_count", items.getCount());
+                        String projectName = projectSnapshot.getKey();
+                        if (projectName != null) {
+                            Intent intent = new Intent(QRScannerActivity.this, HomeActivity.class);
+                            intent.putExtra("project_name", projectName);
+                            intent.putExtra("qrcode", itemQrCode);
                             startActivity(intent);
-                            finish();
                         }
                         itemFound = true;
                         break;
