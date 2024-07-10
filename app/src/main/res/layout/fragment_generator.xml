@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/backgroundColor"
-    android:padding="25dp">
+    android:paddingHorizontal="25dp">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:padding="20dp"
         app:cardCornerRadius="50dp"
-        android:layout_marginTop="100dp">
+        android:layout_marginTop="80dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,7 +25,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="30dp"
                 android:text="@string/qr_code_generator"
                 android:textSize="25sp"
                 android:textStyle="bold"/>

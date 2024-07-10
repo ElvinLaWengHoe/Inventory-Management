@@ -46,6 +46,12 @@ public class GeneratorFragment extends Fragment {
     private ImageView image_view_qr_code;
     private Bitmap qr_code_bitmap;
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

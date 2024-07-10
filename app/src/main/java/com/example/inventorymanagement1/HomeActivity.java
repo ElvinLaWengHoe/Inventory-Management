@@ -101,7 +101,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.menu_home, menu);
         return true;
     }
 
@@ -114,9 +114,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             menu.clear();
             getMenuInflater().inflate(R.menu.menu_item, menu);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
+        } else if (currentFragment instanceof HomeFragment) {
+            menu.clear();
+            getMenuInflater().inflate(R.menu.menu_home, menu);
+            getSupportActionBar().setTitle("Projects");
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
         } else {
             menu.clear();
-            getMenuInflater().inflate(R.menu.menu, menu);
+            getMenuInflater().inflate(R.menu.menu_others, menu);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         return true;
