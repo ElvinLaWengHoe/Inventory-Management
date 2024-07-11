@@ -48,7 +48,7 @@
                 android:textSize="15sp"
                 android:layout_marginTop="10dp"
                 android:textAlignment="center"
-                android:hint="Special Characters (., #, $, [, ], /) will be removed before generating QR Code."/>
+                android:hint="@string/Special_characters_qrcode"/>
 
             <ImageView
                 android:id="@+id/image_view_qr_code"

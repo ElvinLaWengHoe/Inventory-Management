@@ -18,7 +18,7 @@
     <string name="register">Register</string>
     <string name="click_here_to_login">Click Here To Login</string>
     <string name="about_description_1">This App is made with the purpose of making inventory management easier.</string>
-    <string name="about_description_2">Add as many items as needed and uniquely identify them with their own QR codes.</string>
+    <string name="about_description_2">Add as many projects and items needed and uniquely identify them with their own QR codes.</string>
     <string name="add_item">Add Item</string>
     <string name="qr_code_number">Qr Code Number</string>
     <string name="scan_qr_code_to_link_to_item">Scan QR code to link to item</string>
@@ -40,4 +40,11 @@
     <string name="home">Home</string>
     <string name="about">About</string>
     <string name="edit_quantity">Edit Quantity</string>
+    <string name="project_name">Project Name</string>
+    <string name="rename_project">Rename Project</string>
+    <string name="Special_characters">Special Characters (., #, $, [, ], /) will be removed before saving Component Name.</string>
+    <string name="add_project">Add Project</string>
+    <string name="Special_characters_project">Special Characters (., #, $, [, ], /) will be removed before saving Project Name.</string>
+    <string name="Special_characters_qrcode">Special Characters (., #, $, [, ], /) will be removed before generating QR Code.</string>
+    <string name="delete_project">Delete Project</string>
 </resources>
